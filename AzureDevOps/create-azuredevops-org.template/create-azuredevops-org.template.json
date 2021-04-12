@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accountName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the Azure DevOps Organization"
+            }
+        },
+        "projectName": {
+            "type": "String",
+            "metadata": {
+                "description": "The name of the Azure DevOps Project"
+            }
+        },
+        "processTemplateId": {
+            "type": "String",
+            "defaultValue": "6B724908-EF14-45CF-84F8-768B5384DA45",
+            "allowedValues": [
+                "6B724908-EF14-45CF-84F8-768B5384DA45",
+                "ADCC42AB-9882-485E-A3ED-7678F01F66BC",
+                "27450541-8E31-4150-9947-DC59F998FC01"
+            ],
+            "metadata": {
+                "description": "Scrum: 6B724908-EF14-45CF-84F8-768B5384DA45, Agile: ADCC42AB-9882-485E-A3ED-7678F01F66BC, CMMI: 27450541-8E31-4150-9947-DC59F998FC01"
+            }
+        },
+        "versionControlOption": {
+            "type": "String",
+            "defaultValue": "Git",
+            "allowedValues": [
+                "Git",
+                "Tfvc"
+            ],
+            "metadata": {
+                "description": "The version control for the Azure DevOps Project"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "type": "microsoft.visualstudio/account",
+            "apiVersion": "2014-04-01-preview",
+            "name": "[parameters('accountName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "tags": {},
+            "properties": {
+                "operationType": "Create",
+                "accountName": "[parameters('accountName')]"
+            },
+            "resources": [
+                {
+                    "type": "microsoft.visualstudio/account/project",
+                    "apiVersion": "2014-04-01-preview",
+                    "name": "[concat(parameters('accountName'), '/', parameters('projectName'))]",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[resourceId('microsoft.visualstudio/account', concat(parameters('accountName')))]"
+                    ],
+                    "properties": {
+                        "ProcessTemplateId": "[parameters('processTemplateId')]",
+                        "VersionControlOption": "[parameters('versionControlOption')]"
+                    }
+                }
+            ]
+        }
+    ],
+    "outputs": {}
+}
