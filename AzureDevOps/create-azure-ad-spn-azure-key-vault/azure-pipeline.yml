@@ -25,5 +25,5 @@ jobs:
           azureSubscription: '${{ parameters.serviceConnection }}'
           ScriptType: 'FilePath'
           ScriptPath: './create-azure-ad-spn-azure-key-vault/create-azure-ad-spn-azure-key-vault.ps1'
-          ScriptArguments: '-keyVault ${{ parameters.keyVault }} -principalName ${{ parameters.principalName }} -validityInMonths ${{ parameters.validityInMonths }}'
+          ScriptArguments: '-keyVault ${{ parameters.keyVault }} -principalName ${{ parameters.principalName }} -validityInMonths ${{ parameters.validityPeriod }}'
           azurePowerShellVersion: 'LatestVersion'
