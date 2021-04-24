@@ -1,0 +1,29 @@
+trigger: none
+pr: none
+
+parameters:
+  - name: principalName
+    displayName: 'Name of the Service Principal to create'
+    type: string 
+  - name: keyVault
+    displayName: 'Name of the Azure Key Vault that will store the Self-Signed Certificate'
+    type: string
+  - name: validityPeriod
+    displayName: 'The number of months that the Self-Signed Certificate is valid for'
+    type: string
+  - name: serviceConnection
+    displayName: 'Name of Azure Resource Manager Service Connection to use'
+    type: string
+
+jobs:
+  - job: Create_Service_Principal
+    pool: 
+      vmImage: 'windows-latest'
+    steps:
+      - task: AzurePowerShell@5
+        inputs:
+          azureSubscription: '${{ parameters.serviceConnection }}'
+          ScriptType: 'FilePath'
+          ScriptPath: './create-azure-ad-spn-azure-key-vault/create-azure-ad-spn-azure-key-vault.ps1'
+          ScriptArguments: '-keyVault ${{ parameters.keyVault }} -principalName ${{ parameters.principalName }} -validityInMonths ${{ parameters.validityInMonths }}'
+          azurePowerShellVersion: 'LatestVersion'
